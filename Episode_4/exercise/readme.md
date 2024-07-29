@@ -1,0 +1,1 @@
+Exercise: Create a Sol Lewitt picture using D3

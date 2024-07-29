@@ -1,0 +1,1 @@
+Here I will learn javascript arrays in D3

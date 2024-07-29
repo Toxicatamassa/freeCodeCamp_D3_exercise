@@ -1,0 +1,1 @@
+Made a Sol Lewitt picture 

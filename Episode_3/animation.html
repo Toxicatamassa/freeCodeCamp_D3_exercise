@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        rect {
+            stroke: black;
+            stroke-width: 10;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // create list of 6 random colors
+        const colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', '#E6B333'];
+
+        // create svg element
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', width);
+        svg.setAttribute('height', height);
+        document.body.appendChild(svg);
+
+        // create clip path for circles
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        const clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+        clipPath.setAttribute('id', 'clip');
+        const clipRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        clipRect.setAttribute('x', width * 0.25);
+        clipRect.setAttribute('y', 0);
+        clipRect.setAttribute('width', width * 0.75);
+        clipRect.setAttribute('height', height * 0.75);
+        clipPath.appendChild(clipRect);
+        defs.appendChild(clipPath);
+        svg.appendChild(defs);
+
+        // create a left rectangle element
+        const rectH = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rectH.setAttribute('x', 0);
+        rectH.setAttribute('y', 0);
+        rectH.setAttribute('width', width * 0.25);
+        rectH.setAttribute('height', height);
+        rectH.setAttribute('fill', "gold");
+        svg.appendChild(rectH);
+
+        // In the left rectangle, create thick lines without space with random colors
+        for (let i = 0; i < height / 10; i++) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', 0);
+            line.setAttribute('y1', 10 * i);
+            line.setAttribute('x2', width * 0.25);
+            line.setAttribute('y2', 10 * i);
+            line.setAttribute('stroke', colors[Math.floor(Math.random() * colors.length)]);
+            line.setAttribute('stroke-width', 10);
+            svg.appendChild(line);
+        }
+
+        // create a right rectangle element
+        const rectC = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rectC.setAttribute('x', width * 0.25);
+        rectC.setAttribute('y', 0);
+        rectC.setAttribute('width', width * 0.75);
+        rectC.setAttribute('height', height * 0.75);
+        rectC.setAttribute('fill', "lightblue");
+        svg.appendChild(rectC);
+
+        // create circles starting from outside the top left corner of the right rectangle and increasing the radius by 10
+        const circles = [];
+        for (let i = 0; i < 2000 / 15; i++) {
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', width * 0.25 - 20);
+            circle.setAttribute('cy', -20);
+            circle.setAttribute('r', 10 + 10 * i);
+            circle.setAttribute('stroke', colors[Math.floor(Math.random() * colors.length)]);
+            circle.setAttribute('stroke-width', 10);
+            circle.setAttribute('fill', "none");
+            circle.setAttribute('clip-path', 'url(#clip)');
+            svg.appendChild(circle);
+            circles.push(circle);
+        }
+
+        // animate the circles
+        function animateCircles() {
+            circles.forEach((circle, index) => {
+                const radius = parseFloat(circle.getAttribute('r'));
+                const duration = 2000 + index * 100; // animation duration
+                circle.setAttribute('cx', width * 0.25 - 20);
+                circle.setAttribute('cy', -20);
+                circle.setAttribute('r', radius);
+
+                // create animation
+                const animateCx = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+                animateCx.setAttribute('attributeName', 'cx');
+                animateCx.setAttribute('from', width * 0.25 - 20);
+                animateCx.setAttribute('to', width * 0.25 + width * 0.75 + 20);
+                animateCx.setAttribute('dur', duration + 'ms');
+                animateCx.setAttribute('repeatCount', 'indefinite');
+                circle.appendChild(animateCx);
+
+                const animateCy = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+                animateCy.setAttribute('attributeName', 'cy');
+                animateCy.setAttribute('from', -20);
+                animateCy.setAttribute('to', height * 0.75 + 20);
+                animateCy.setAttribute('dur', duration + 'ms');
+                animateCy.setAttribute('repeatCount', 'indefinite');
+                circle.appendChild(animateCy);
+            });
+        }
+
+        animateCircles();
+
+        // create a bottom rectangle element
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', width * 0.25);
+        rect.setAttribute('y', height * 0.75);
+        rect.setAttribute('width', width * 0.75);
+        rect.setAttribute('height', height * 0.25);
+        rect.setAttribute('fill', colors[Math.floor(Math.random() * colors.length)]);
+        svg.appendChild(rect);
+
+        // create vertical lines in the bottom rectangle
+        for (let i = 0; i < width * 0.75 / 10; i++) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', width * 0.25 + 10 + 10 * i);
+            line.setAttribute('y1', height * 0.75);
+            line.setAttribute('x2', width * 0.25 + 10 + 10 * i);
+            line.setAttribute('y2', height);
+            line.setAttribute('stroke', colors[Math.floor(Math.random() * colors.length)]);
+            line.setAttribute('stroke-width', 10);
+            svg.appendChild(line);
+        }
+    </script>
+</body>
+</html>

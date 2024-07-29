@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // .createElementNS() method creates an element with the specified namespace URI and qualified name.
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', width);
+        svg.setAttribute('height', height);
+        document.body.appendChild(svg);
+        
+        //set the mask attribute
+        const mask = document.createElementNS('http://www.w3.org/2000/svg', 'mask');    
+        mask.setAttribute('id', 'circle-mask');
+        svg.appendChild(mask);
+
+        const maskRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');    
+        maskRect.setAttribute('width', width);
+        maskRect.setAttribute('height', height);
+        maskRect.setAttribute('fill', 'black');
+        mask.appendChild(maskRect);
+
+        // circle in the mask
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');    
+        circle.setAttribute('cx', width / 2);
+        circle.setAttribute('cy', height / 2);
+        circle.setAttribute('r', 200);
+        circle.setAttribute('fill', 'white');
+        mask.appendChild(circle);
+
+        
+        const mask2 = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'mask',
+      );
+      mask2.setAttribute('id', 'circle-mask-2');
+      svg.appendChild(mask2);
+
+      const maskrect2 = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'rect',
+      );
+      maskrect2.setAttribute('width', width);
+      maskrect2.setAttribute('height', height);
+      maskrect2.setAttribute('fill', 'white');
+      mask2.appendChild(maskrect2);
+
+      const circle2 = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'circle',
+      );
+      circle2.setAttribute('cx', width / 2);
+      circle2.setAttribute('cy', height / 2);
+      circle2.setAttribute('r', 200);
+      circle2.setAttribute('fill', 'black');
+      mask2.appendChild(circle2);
+
+      const n = 100;
+      for (let i = 0; i < n; i++) {
+        const rect = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'rect',
+        );
+        rect.setAttribute('y', i * 20);
+        rect.setAttribute('width', width);
+        rect.setAttribute('height', 10);
+        rect.setAttribute('mask', 'url(#circle-mask)');
+        svg.appendChild(rect);
+      }
+
+      for (let i = 0; i < n; i++) {
+        const rect = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'rect',
+        );
+        rect.setAttribute('x', i * 20);
+        rect.setAttribute('width', 10);
+        rect.setAttribute('height', height);
+        rect.setAttribute('mask', 'url(#circle-mask-2)');
+        svg.appendChild(rect);
+      }
+    </script>
+</body>
+</html>
