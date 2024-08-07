@@ -1,3 +1,4 @@
+// tweakable
 const csvUrl =
   "https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/0e7a9b0a5d22642a06d3d5b9bcbad9890c8ee534/iris.csv";
 
@@ -26,17 +27,18 @@ const svg = d3
   .append("g")
   .attr("transform", `translate(${margin.left},${margin.top})`);
 
+  // Generitic
 const main = async () => {
   const data = await d3.csv(csvUrl, parseRow);
 
   // Create scales
   const xScale = d3.scaleLinear()
-    .domain(d3.extent(data, xValue))
+    .domain([0,d3.max(data, xValue)])
     .range([0, width])
     .nice();
 
   const yScale = d3.scaleLinear()
-    .domain(d3.extent(data, yValue))
+    .domain([0,d3.max(data, yValue)])
     .range([height, 0])
     .nice();
 
