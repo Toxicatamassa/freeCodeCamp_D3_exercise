@@ -3,26 +3,15 @@ body {
     overflow: hidden;
 }
 
-.tick text {
-    font-size: 24px;
+.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 120px;
+  height: 28px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
 }
-
-.grid line {
-    stroke: lightgrey;
-    stroke-opacity: 0.7;
-    shape-rendering: crispEdges;
-  }
-  .grid path {
-    stroke-width: 0;
-  }
-  .tooltip {
-    position: absolute;
-    text-align: left;
-    width: 200px;
-    padding: 10px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-  }
