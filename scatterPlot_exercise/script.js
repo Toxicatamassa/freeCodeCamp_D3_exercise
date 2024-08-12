@@ -13,12 +13,12 @@ const svg = d3.select("body").append("svg")
 d3.csv("./dataset/heart_attack_dataset.csv").then(function(data) {
     console.log(data);
     
-    // create the x axis
+    // create the x range and domain
     const x = d3.scaleLinear()
         .domain([0, d3.max(data, d => parseFloat(d.Age))])
         .range([0, width]);
         
-    // create the y axis
+    // create the y range and domain
     const y = d3.scaleLinear()
         .domain([0, d3.max(data, d => parseFloat(d.Cholesterol))])
         .range([height, 0]);
