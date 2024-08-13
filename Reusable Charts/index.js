@@ -59,7 +59,7 @@ const main = async () => {
         top: 20,
         right: 20,
         bottom: 40,
-        left: 50,
+        left: 100,
       })
       .radius(5);
 
@@ -77,13 +77,27 @@ const main = async () => {
       'petal_length',
       'sepal_length',
     ];
+
+    const columnLabels = {
+      petal_width: 'Petal Width (cm)',
+      sepal_width: 'Sepal Width (cm)',
+      petal_length: 'Petal Length (cm)',
+      sepal_length: 'Sepal Length (cm)',
+    };
+
     let i = 0;
     setInterval(() => {
       plot.xValue((d) => d[columns[i % columns.length]]);
+      // set up axis labels
+      plot
+      .xAxisLabel(columnLabels[columns[i % columns.length]])
+      .yAxisLabel('Sepal Length (cm)');
+
+      
       svg.call(plot);
       console.log('Plot updated with new x-value:', columns[i % columns.length]);
       i++;
-    }, 2000);
+    }, 3000);
 
   } catch (error) {
     console.error('An error occurred:', error);
