@@ -1,56 +1,53 @@
-
-
 export const menu = () => {
   let id;
   let labelText;
-  let options = [];
-  const listeners = d3.dispatch('change');
+  let options;
+  const listeners = d3.dispatch("change");
+  // <label for="cars">Choose a car:</label>
 
+  // <select name="cars" id="cars">
+  //   <option value="volvo">Volvo</option>
+  //   <option value="saab">Saab</option>
+  //   <option value="mercedes">Mercedes</option>
+  //   <option value="audi">Audi</option>
+  // </select>
   const my = (selection) => {
     selection
-      .selectAll('label')
+      .selectAll("label")
       .data([null])
-      .join('label')
-      .attr('for', id)
+      .join("label")
+      .attr("for", id)
       .text(labelText);
 
-    const select = selection
-      .selectAll('select')
+    selection
+      .selectAll("select")
       .data([null])
-      .join('select')
-      .attr('id', id)
-      .on('change', (event) => {
-        listeners.call('change', null, event.target.value);
-      });
-
-    select
-      .selectAll('option')
+      .join("select")
+      .attr("id", id)
+      .on("change", (event) => {
+        listeners.call("change", null, event.target.value);
+      })
+      .selectAll("option")
       .data(options)
-      .join('option')
-      .attr('value', d => d)
-      .text(d => d);
+      .join("option")
+      .attr("value", (d) => d.value)
+      .text((d) => d.text);
   };
 
-  my.id = function(value) {
-    if (!arguments.length) return id;
-    id = value;
-    return my;
+  my.id = function (_) {
+    return arguments.length ? ((id = _), my) : id;
   };
 
-  my.labelText = function(value) {
-    if (!arguments.length) return labelText;
-    labelText = value;
-    return my;
+  my.labelText = function (_) {
+    return arguments.length ? ((labelText = _), my) : labelText;
   };
 
-  my.options = function(value) {
-    if (!arguments.length) return options;
-    options = value;
-    return my;
+  my.options = function (_) {
+    return arguments.length ? ((options = _), my) : options;
   };
 
-  my.on = function() {
-    const value = listeners.on.apply(listeners, arguments);
+  my.on = function () {
+    var value = listeners.on.apply(listeners, arguments);
     return value === listeners ? my : value;
   };
 

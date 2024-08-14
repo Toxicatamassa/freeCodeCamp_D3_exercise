@@ -4,86 +4,63 @@ export const scatterPlot = () => {
   let data;
   let xValue;
   let yValue;
+  let xType;
+  let yType;
   let margin;
   let radius;
-  let xAxisLabel;
-  let yAxisLabel;
 
   const my = (selection) => {
-    // Check if all required properties are set
-    if (
-      !width ||
-      !height ||
-      !data ||
-      !xValue ||
-      !yValue ||
-      !margin ||
-      !radius
-    ) {
-      console.error("ScatterPlot: Not all required properties are set.");
-      return;
-    }
+    const x = (
+      xType === "categorical"
+        ? d3.scalePoint().domain(data.map(xValue)).padding(0.2)
+        : d3.scaleLinear().domain(d3.extent(data, xValue))
+    ).range([margin.left, width - margin.right]);
 
-    // Set up scales
-    const x =
-      xType === "categorial"
-      ? d3
-        .scalePoint()
-        .domain(data.map(xValue))
-        .range([margin.left, width - margin.right])
-      : d3
-        .scaleLinear()
-        .domain(d3.extent(data, xValue))
-        .range([margin.left, width - margin.right]);
+    const y = (
+      yType === "categorical"
+        ? d3.scalePoint().domain(data.map(yValue)).padding(0.2)
+        : d3.scaleLinear().domain(d3.extent(data, yValue))
+    ).range([height - margin.bottom, margin.top]);
 
-    const y = d3
-      .scaleLinear()
-      .domain(d3.extent(data, yValue))
-      .range([height - margin.bottom, margin.top]);
-
-    // Create marks
     const marks = data.map((d) => ({
       x: x(xValue(d)),
       y: y(yValue(d)),
     }));
 
-    // Set up transition
-    const t = d3.transition().duration(2000).ease(d3.easeExpIn);
+    const t = d3.transition().duration(1000);
 
-    // Update circles
-    selection
+    const positionCircles = (circles) => {
+      circles.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+    };
+
+    const initializeRadius = (circles) => {
+      circles.attr("r", 0);
+    };
+    const growRadius = (enter) => {
+      enter.transition(t).attr("r", radius);
+    };
+
+    const circles = selection
       .selectAll("circle")
       .data(marks)
       .join(
         (enter) =>
           enter
             .append("circle")
-            .attr("cx", (d) => d.x)
-            .attr("cy", (d) => d.y)
-            .attr("r", 0),
+            .call(positionCircles)
+            .call(initializeRadius)
+            .call(growRadius),
         (update) =>
           update.call((update) =>
             update
               .transition(t)
               .delay((d, i) => i * 10)
-              .attr("cx", (d) => d.x)
-              .attr("cy", (d) => d.y)
-              .attr("r", radius)
+              .call(positionCircles)
           ),
-        (exit) =>
-          exit
-            .transition(t)
-            .duration(1000) // Change the duration to 2000 milliseconds
-            .attr("fill", "red") // Change the color to red
-            .remove()
-      )
-      .transition(t)
-      .attr("cx", (d) => d.x)
-      .attr("cy", (d) => d.y)
-      .attr("r", radius);
+        (exit) => exit.remove()
+      );
 
-    // Update axes
-    selection
+    selection 
       .selectAll(".y-axis")
       .data([null])
       .join("g")
@@ -100,31 +77,8 @@ export const scatterPlot = () => {
       .attr("transform", `translate(0,${height - margin.bottom})`)
       .transition(t)
       .call(d3.axisBottom(x));
-
-    // add axis labels
-    selection
-      .selectAll(".x-axis-label")
-      .data([null])
-      .join("text")
-      .attr("class", "x-axis-label")
-      .attr("x", width - margin.right - 100)
-      .attr("y", height - 2 * margin.bottom + 20)
-      .attr("text-anchor", "middle")
-
-      .text(xAxisLabel);
-
-    selection
-      .selectAll(".y-axis-label")
-      .data([null])
-      .join("text")
-      .attr("class", "y-axis-label")
-      .attr("x", margin.left / 2 + 160)
-      .attr("y", 40)
-      .attr("text-anchor", "middle")
-      .text(yAxisLabel);
   };
 
-  // Getter/setter methods remain the same
   my.width = function (_) {
     return arguments.length ? ((width = +_), my) : width;
   };
@@ -145,20 +99,20 @@ export const scatterPlot = () => {
     return arguments.length ? ((yValue = _), my) : yValue;
   };
 
+  my.xType = function (_) {
+    return arguments.length ? ((xType = _), my) : xType;
+  };
+
+  my.yType = function (_) {
+    return arguments.length ? ((yType = _), my) : yType;
+  };
+
   my.margin = function (_) {
     return arguments.length ? ((margin = _), my) : margin;
   };
 
   my.radius = function (_) {
     return arguments.length ? ((radius = +_), my) : radius;
-  };
-
-  my.xAxisLabel = function (_) {
-    return arguments.length ? ((xAxisLabel = _), my) : xAxisLabel;
-  };
-
-  my.yAxisLabel = function (_) {
-    return arguments.length ? ((yAxisLabel = _), my) : yAxisLabel;
   };
 
   return my;

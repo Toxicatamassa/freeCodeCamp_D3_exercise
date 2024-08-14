@@ -25,16 +25,10 @@ export const scatterPlot = () => {
     }
 
     // Set up scales
-    const x =
-      xType === "categorial"
-      ? d3
-        .scalePoint()
-        .domain(data.map(xValue))
-        .range([margin.left, width - margin.right])
-      : d3
-        .scaleLinear()
-        .domain(d3.extent(data, xValue))
-        .range([margin.left, width - margin.right]);
+    const x = d3
+      .scaleLinear()
+      .domain(d3.extent(data, xValue))
+      .range([margin.left, width - margin.right]);
 
     const y = d3
       .scaleLinear()
